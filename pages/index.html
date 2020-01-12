@@ -1,0 +1,155 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>IoT 2 ERP</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">IoT 2 ERP</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">API Definition</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>IoT ERP - Sample</h1>
+        <div class="row" style="padding-top:20px;">
+            <div class="col-lg-6 col-sm-12 text-center">
+                <h3>Last Temperature</h3>
+                <canvas id="temperature" device-id="5c44e84bae296b92cc04baed"></canvas>
+                <div class="text-center">
+                    <span id="textTemperature" style="font-size: 24px;" class=""></span>
+                    <span>&#8451;</span>
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-12 text-center">
+                <h3>Last Humidity</h3>
+                <canvas id="humidity" device-id="5c4c0f2532c4f14fdcde8de9"></canvas>
+                <div class="text-center">
+                    <span id="textHumidity" style="font-size: 24px;" class=""></span>
+                    <span>%</span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <span id="textTimeStamp"></span>
+            </div>
+        </div>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <script src="/static/gauge/gauge.js"></script>
+    <script src="/static/socket.io/socket.io.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var opts = {
+            angle: 0.2, // The span of the gauge arc
+            lineWidth: 0.13, // The line thickness
+            radiusScale: 1, // Relative radius
+            pointer: {
+                length: 0.6, // // Relative to gauge radius
+                strokeWidth: 0.035, // The thickness
+                color: '#000000' // Fill color
+            },
+            limitMax: false,     // If false, max value increases automatically if value > maxValue
+            limitMin: false,     // If true, the min value of the gauge will be fixed
+            colorStart: '#6F6EA0',   // Colors
+            colorStop: '#C0C0DB',    // just experiment with them
+            strokeColor: '#EEEEEE',  // to see which ones work best for you
+            generateGradient: true,
+            highDpiSupport: true,     // High resolution support
+
+        };
+        var targetTemperature = document.getElementById('temperature'); // your canvas element
+        var temperature = new Donut(targetTemperature).setOptions(opts); // create sexy gauge!
+        temperature.maxValue = 50; // set max gauge value
+        temperature.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+        temperature.animationSpeed = 1; // set animation speed (32 is default value)
+        temperature.setTextField(document.getElementById("textTemperature"));
+        temperature.set(0); // set actual value
+
+        var targetHumidity = document.getElementById('humidity'); // your canvas element
+        var humidity = new Donut(targetHumidity).setOptions(opts); // create sexy gauge!
+        humidity.maxValue = 100; // set max gauge value
+        humidity.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+        humidity.animationSpeed = 1; // set animation speed (32 is default value)
+        humidity.setTextField(document.getElementById("textHumidity"));
+        humidity.set(0); // set actual value
+    </script>
+
+
+
+    <script>
+        var socket = io();
+        $(document).ready(function () {
+            //$("#button").click(function () {
+            //    socket.emit('arduino', "Hello World!");
+            //})
+        });
+        socket.on('welcome', function (data) {
+            $('#messages').append('<li>' + data.message + '</li>');
+
+            socket.emit('atime', { data: 'foo!' });
+        });
+        socket.on('arduino', function (data) {
+            debugger;
+        });
+
+        socket.on('value_updated', function (data) {
+            var myDate = new Date(data.timestamp);
+            var time = myDate.getDate() + "." +
+                (myDate.getMonth() + 1) + "." +
+                (myDate.getFullYear()) + " " +
+                (myDate.getHours().toString().length > 1 ? myDate.getHours() : "0" + myDate.getHours().toString()) + ":" +
+                (myDate.getMinutes().toString().length > 1 ? myDate.getMinutes() : "0" + myDate.getMinutes().toString()) + ":" +
+                (myDate.getSeconds().toString().length > 1 ? myDate.getSeconds() : "0" + myDate.getSeconds().toString()) + "." +
+                (myDate.getMilliseconds().toString().length > 1 ? myDate.getMilliseconds() : "0" + myDate.getMilliseconds().toString());
+
+            $("#textTimeStamp").html("Timestamp: " + time);
+
+            var type = $("[device-id='" + data.device + "']").attr("id");
+            if (type == "temperature")
+                temperature.set(data.value);
+            else if (type == "humidity")
+                humidity.set(data.value);
+
+            debugger;
+        });
+
+        socket.on('error', function () { console.error(arguments) });
+        socket.on('message', function () { console.log(arguments) });
+    </script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-134089407-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-134089407-1');
+    </script>
+</body>
+</html>
