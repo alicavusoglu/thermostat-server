@@ -90,7 +90,7 @@ io.on('connection', function (socket) {
             target_degree.
                 findOne({ _id: input.id }). // only return the Persons name
                 exec(function (err, input) {
-                        io.sockets.emit('value_updated', input);
+                        io.sockets.emit('target_degree', input);
                     });
             target_degree.deleteMany({ timeStamp: { $lt: input.timeStamp - (5 * 60000) } }, function (err) { });
             });
@@ -108,7 +108,7 @@ io.on('connection', function (socket) {
             room_state.
                 findOne({ _id: input.id }). // only return the Persons name
                 exec(function (err, input) {
-                        io.sockets.emit('value_updated', input);
+                        io.sockets.emit('room_state', input);
                     });
             room_state.deleteMany({ timeStamp: { $lt: input.timeStamp - (5 * 60000) } }, function (err) { });
             });
