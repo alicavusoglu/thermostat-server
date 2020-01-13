@@ -45,10 +45,18 @@ function ParseJson(jsondata) {
 
 io.on('connection', function (socket) {
     console.log("Connected");
-    socket.emit('welcome', { message: 'Connected !!!!' });
+    target_degree.
+    findOne()
+    .sort({timeStamp: -1}).
+    exec(function (err, input) {
+            io.sockets.emit('target_degree', input);
+        });
+
+    socket.emit('target_degree', { message: 'Connected !!!!' });
     socket.on('connection', function (data) {
         console.log(data);
     });
+    
     socket.on('atime', function (data) {
 
     });
