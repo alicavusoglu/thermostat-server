@@ -45,14 +45,14 @@ function ParseJson(jsondata) {
 
 io.on('connection', function (socket) {
     console.log("Connected");
-    target_degree.
+    var item=target_degree.
     findOne()
     .sort({timeStamp: -1}).
     exec(function (err, input) {
             io.sockets.emit('target_degree', input);
         });
 
-    socket.emit('target_degree', { message: 'Connected !!!!' });
+    socket.emit('target_degree', item);
     socket.on('connection', function (data) {
         console.log(data);
     });
