@@ -1,6 +1,5 @@
 import relay_local_ip from '../models/relay_local_ip';
-let router = require('express').Router();
-
+let router = require('express').Router(); 
 router.route('/')
     .get((req, res) => {
         relay_local_ip.find({}, (err, relay_local_ips) => {
@@ -8,9 +7,9 @@ router.route('/')
         });
     })
     .post((req, res) => {
-        let relay_local_ip = new relay_local_ip(req.body);
-        relay_local_ip.save();
-        res.status(201).send(relay_local_ip);
+        let input = new relay_local_ip(req.body);
+        input.save();
+        res.status(201).send("Input OK");
     });
 
 module.exports = router;
