@@ -7,8 +7,10 @@ import bodyParser from 'body-parser';
 let apiRoute = require('./routes/api');
 let targetDegreeRoute = require('./routes/target_degree');
 let roomStateRoute = require('./routes/room_state');
+let relayLocalIpRoute = require('./routes/relay_local_ip');
 import room_state from './models/room_state';
 import target_degree from './models/target_degree';
+import relay_local_ip from './models/relay_local_ip';
 
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/pages/index.html');
