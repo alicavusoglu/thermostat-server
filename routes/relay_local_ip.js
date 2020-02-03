@@ -2,7 +2,7 @@ import relay_local_ip from '../models/relay_local_ip';
 let router = require('express').Router(); 
 router.route('/')
     .get((req, res) => {
-        var item=relay_local_ip.findOne().sort({timeStamp: -1}).exec(function (err, input) {
+        relay_local_ip.findOne().sort({timeStamp: -1}).exec(function (err, input) {
             res.json(relay_local_ips);
             });
     })
