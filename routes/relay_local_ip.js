@@ -1,7 +1,7 @@
 import relay_local_ip from '../models/relay_local_ip';
 let router = require('express').Router();
 
-router.route('/lip')
+router.route('/')
     .get((req, res) => {
         relay_local_ip.find({}, (err, relay_local_ips) => {
             res.json(relay_local_ips);

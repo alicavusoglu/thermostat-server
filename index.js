@@ -24,6 +24,7 @@ app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist')
 app.use('/api', apiRoute);
 app.use('/api/target-degree', targetDegreeRoute);
 app.use('/api/room-state', roomStateRoute);
+app.use('/api/local-ip', relayLocalIpRoute);
 
 mongoose.connect('mongodb://alicavusoglu:beldeyama258852@ds161134.mlab.com:61134/heroku_tsk5gnhh');
 var db = mongoose.connection;
