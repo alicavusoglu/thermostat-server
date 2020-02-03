@@ -7,6 +7,7 @@ router.route('/')
             });
     })
     .post((req, res) => {
+        console.log(req.body);
         let input = new relay_local_ip(req.body);
         input.save();
         res.status(201).send("Input OK");
