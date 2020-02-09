@@ -92,6 +92,7 @@ io.on('connection', function (socket) {
     });
 
     socket.on('target_degree', function (data) {
+        console.log(data);
         let targetDegree = new target_degree(data);
         var timeStamp = null;
         targetDegree.save(function (err, input) {
