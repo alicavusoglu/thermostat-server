@@ -26,14 +26,14 @@ app.use('/api/target-degree', targetDegreeRoute);
 app.use('/api/room-state', roomStateRoute);
 app.use('/api/local-ip', relayLocalIpRoute);
 
-mongoose.connect('mongodb://[your_mongo_db_connection]');
+mongoose.connect('mongodb://[your_mongo_db_connection] ');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function (err, db) {
     if (err) {
         throw err;
     }
-    console.log('MongoDB connected');
+    console.log('MongoDB connected'); 
 });
 
 
